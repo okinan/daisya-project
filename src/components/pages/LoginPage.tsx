@@ -6,7 +6,7 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import LoginCard from "../molecules/LoginCard";
 
-function Login() {
+const LoginPage = () => {
   //history.pushでページ遷移できる
   // const history = useHistory();
 
@@ -79,6 +79,6 @@ function Login() {
       </Grid>
     </>
   );
-}
+};
 
-export default Login;
+export default LoginPage;

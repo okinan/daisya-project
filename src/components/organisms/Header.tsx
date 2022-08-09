@@ -18,8 +18,9 @@ import Drawer from "@mui/material/Drawer";
 import Divider from "@mui/material/Divider";
 import List from "@mui/material/List";
 import axios from "axios";
+// import image from "../../../images/logo.png";
 
-export const Header = () => {
+const Header = () => {
   // const history = useHistory();
 
   const [open, setOpen] = React.useState(false);
@@ -91,7 +92,7 @@ export const Header = () => {
                 textAlign: "center",
               }}
             >
-              <img src="/storage/images/logo.png" alt="ロゴ" width="80" />
+              <img src="../../../" alt="ロゴ" width="80" />
             </Container>
             <Box
               sx={{
@@ -150,7 +151,7 @@ export const Header = () => {
               </Link>
               <Box sx={{ mr: 1 }}></Box>
               <Link
-                to="/#"
+                to="/login"
                 onClick={logoutSubmit}
                 style={{ textDecoration: "none" }}
               >
@@ -269,7 +270,7 @@ export const Header = () => {
               </ListItemButton>
             </Link>
             <Link
-              to="/#"
+              to="/login"
               onClick={logoutSubmit}
               style={{ textDecoration: "none" }}
             >

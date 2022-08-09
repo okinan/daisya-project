@@ -1,7 +1,7 @@
 import React from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import SyakenTable from "../atoms/table/SyakenTable";
+import SyakenTable from "./SyakenTable";
 import { styled } from "@mui/system";
 
 // import React, { useState } from "react";
@@ -17,26 +17,25 @@ const SDiv = styled("div")(() => ({
   whiteSpace: "nowrap",
   textAlign: "center",
   marginTop: "5px",
-  marginBottom: "10px"
+  marginBottom: "10px",
 }));
 
 function SyakenCard() {
-
   return (
     <>
-    <Card
+      <Card
         variant="outlined"
         style={{
           backgroundColor: "#FDFCFB",
           borderRadius: "24px",
-          border: "3px dashed #FFEFD2"
+          border: "3px dashed #FFEFD2",
         }}
-     >
-    <CardContent>
-      <SDiv>車検更新対象</SDiv>
-      <SyakenTable />
-    </CardContent>
-    </Card>
+      >
+        <CardContent>
+          <SDiv>車検更新対象</SDiv>
+          <SyakenTable />
+        </CardContent>
+      </Card>
     </>
   );
 }

@@ -1,12 +1,10 @@
-import React from "react";
-// import { Redirect } from "react-router-dom";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import DaisuuCard from "../molecules/DaisuuCard";
 import SyakenCard from "../molecules/SyakenCard";
 
-const Top = (props: any) => {
+const TopPage = () => {
   return (
     <>
       <Container
@@ -52,4 +50,4 @@ const Top = (props: any) => {
   );
 };
 
-export default Top;
+export default TopPage;

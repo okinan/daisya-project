@@ -1,16 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter, Route, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 // import { useHistory } from "react-router-dom";
 
 // import GlobalNav from "../components/pages/GlobalNav";
-// import Top from "../components/pages/Top";
+import TopPage from "../components/pages/TopPage";
 // import Register from "../components/pages/Register";
-// import Login from "../components/pages/Login";
-// import Alert from "../components/pages/Alert";
-
-// import Header from "../components/atoms/layout/Header";
-// import Footer from "../components/atoms/layout/Footer";
+import LoginPage from "../components/pages/LoginPage";
+import AlertPage from "../components/pages/AlertPage";
+import MainPageTemplate from "../components/templates/MainPageTemplate";
 
 import axios from "axios";
 
@@ -38,7 +36,14 @@ const Router = () => {
 
   return (
     <BrowserRouter>
-      <h1>Hello World</h1>
+      <Routes>
+        <Route path="/" element={<MainPageTemplate Page={<TopPage />} />} />
+        <Route
+          path="/alert"
+          element={<MainPageTemplate Page={<AlertPage />} />}
+        />
+        <Route path="/login" element={<LoginPage />} />
+      </Routes>
       {/* <Switch>
         <Route exact path="/">
           <Header />

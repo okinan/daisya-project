@@ -1,13 +1,8 @@
-import React from "react";
-// import { Redirect } from "react-router-dom";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import AlertCard from "../molecules/AlertCard";
 
-const Alert = (props: any) => {
-  // if (!props.authflg) {
-  //   return <Redirect to="/login" />;
-  // }
+const AlertPage = () => {
   return (
     <>
       <Container
@@ -42,4 +37,4 @@ const Alert = (props: any) => {
   );
 };
 
-export default Alert;
+export default AlertPage;
