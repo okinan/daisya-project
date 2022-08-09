@@ -106,7 +106,7 @@ const Header = () => {
               }}
             >
               <Box sx={{ ml: 3, mr: 3 }}>
-                <img src="/storage/images/logo.png" alt="ロゴ" width="80" />
+                <img src="images/logo.png" alt="ロゴ" width="80" />
               </Box>
               <Link to="/" style={{ textDecoration: "none" }}>
                 <ListItemButton>

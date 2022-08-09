@@ -67,7 +67,7 @@ const LoginPage = () => {
           textAlign: "center",
         }}
       >
-        <img src="/storage/images/logo.png" alt="ロゴ" width="200" />
+        <img src="images/logo.png" alt="ロゴ" width="200" />
       </Container>
       {/* ログイン画面 */}
       <Grid container sx={{ textAlign: "center", mt: 4, mb: 8 }}>
