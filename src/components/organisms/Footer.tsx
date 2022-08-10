@@ -1,4 +1,3 @@
-import React from "react";
 import { styled } from "@mui/system";
 
 const Sfooter = styled("footer")(() => ({
@@ -9,7 +8,7 @@ const Sfooter = styled("footer")(() => ({
   width: "100%",
   position: "fixed",
   bottom: "0",
-  right:"0"
+  right: "0",
 }));
 
 const Footer = () => {

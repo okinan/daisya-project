@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter, Link } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -18,12 +18,18 @@ import Drawer from "@mui/material/Drawer";
 import Divider from "@mui/material/Divider";
 import List from "@mui/material/List";
 import axios from "axios";
-// import image from "../../../images/logo.png";
+import { signOut } from "firebase/auth";
+import { auth } from "../../firebase/FirebaseConfig";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
-  // const history = useHistory();
-
   const [open, setOpen] = React.useState(false);
+  const navigate = useNavigate();
+
+  const logout = async () => {
+    await signOut(auth);
+    navigate("/login");
+  };
 
   const MenuOpen = () => {
     setOpen(!open);
@@ -92,7 +98,7 @@ const Header = () => {
                 textAlign: "center",
               }}
             >
-              <img src="../../../" alt="ロゴ" width="80" />
+              <img src="images/logo.png" alt="ロゴ" width="80" />
             </Container>
             <Box
               sx={{
@@ -155,7 +161,7 @@ const Header = () => {
                 onClick={logoutSubmit}
                 style={{ textDecoration: "none" }}
               >
-                <ListItemButton>
+                <ListItemButton onClick={logout}>
                   <ListItemIcon>
                     <LogoutIcon fontSize="large" style={{ color: "#000000" }} />
                     <Box sx={{ mr: 1 }}></Box>
@@ -271,7 +277,7 @@ const Header = () => {
             </Link>
             <Link
               to="/login"
-              onClick={logoutSubmit}
+              onClick={logout}
               style={{ textDecoration: "none" }}
             >
               <ListItemButton>
