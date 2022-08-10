@@ -21,10 +21,50 @@ import axios from "axios";
 import { signOut } from "firebase/auth";
 import { auth } from "../../firebase/FirebaseConfig";
 import { useNavigate } from "react-router-dom";
+import { db } from "../../firebase/FirebaseConfig";
+import {
+  collection,
+  getDocs,
+  getDoc,
+  doc,
+  onSnapshot,
+} from "firebase/firestore";
 
 const Header = () => {
+  const [users, setUsers] = useState<any>([]);
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const usersCollectionRef = collection(db, "userstest");
+    // getDocs(usersCollectionRef).then((querySnapshot) => {
+    //   querySnapshot.docs.forEach((doc) => console.log(doc.data()));
+    // });
+    // getDocs(usersCollectionRef).then((querySnapshot) => {
+    //   setUsers(querySnapshot.docs.map((doc) => doc.data()));
+    // });
+    // getDocs(usersCollectionRef).then((querySnapshot: any) => {
+    //   setUsers(
+    //     querySnapshot.docs.map((doc: any) => ({ ...doc.data(), id: doc.id }))
+    //   );
+    // });
+
+    // const userDocumentRef = doc(db, "userstest", "IPyHihThaqsCVHwK2kWh");
+    // getDoc(userDocumentRef).then((documentSnapshot: any) => {
+    //   if (documentSnapshot.exists()) {
+    //     console.log("Document data:", documentSnapshot.data());
+    //   } else {
+    //     console.log("No such document!");
+    //   }
+    // });
+
+    const unsub = onSnapshot(usersCollectionRef, (querySnapshot: any) => {
+      setUsers(
+        querySnapshot.docs.map((doc: any) => ({ ...doc.data(), id: doc.id }))
+      );
+    });
+    return unsub;
+  }, []);
 
   const logout = async () => {
     await signOut(auth);
@@ -44,22 +84,14 @@ const Header = () => {
     alignItems: "center",
   }));
 
-  const logoutSubmit = (e: any) => {
-    e.preventDefault();
-
-    axios.post(`/api/logout`).then((res) => {
-      if (res.data.status === 200) {
-        window.localStorage.removeItem("auth_token");
-        window.localStorage.removeItem("auth_name");
-        // history.push("/login");
-        window.location.reload();
-      }
-    });
-  };
-
   return (
     <>
       <Box>
+        <h1>
+          {users.map((user: any) => (
+            <div key={user.id}>{user.name}</div>
+          ))}
+        </h1>
         <CssBaseline />
         <AppBar
           position="static"
@@ -158,10 +190,10 @@ const Header = () => {
               <Box sx={{ mr: 1 }}></Box>
               <Link
                 to="/login"
-                onClick={logoutSubmit}
+                onClick={logout}
                 style={{ textDecoration: "none" }}
               >
-                <ListItemButton onClick={logout}>
+                <ListItemButton>
                   <ListItemIcon>
                     <LogoutIcon fontSize="large" style={{ color: "#000000" }} />
                     <Box sx={{ mr: 1 }}></Box>
