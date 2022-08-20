@@ -17,17 +17,18 @@ import NotificationsActiveIcon from "@mui/icons-material/NotificationsActive";
 import Drawer from "@mui/material/Drawer";
 import Divider from "@mui/material/Divider";
 import List from "@mui/material/List";
-import axios from "axios";
 import { signOut } from "firebase/auth";
 import { auth } from "../../firebase/FirebaseConfig";
 import { useNavigate } from "react-router-dom";
 import { db } from "../../firebase/FirebaseConfig";
 import {
+  collection,
   doc,
   onSnapshot
 } from "firebase/firestore";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { selectAdmin, selectComName, selectUid, selectUserName, setAdmin, setComName, setUserName } from "../../features/auth/authSlice";
+import { selectComName, selectUid, selectUserName, setAdmin, setComName, setUserName } from "../../features/auth/authSlice";
+import { setAlert1, setAlert2, setAlert3, setAlert4, setAlert5, setDocId } from "../../features/alert/alertSlice";
 
 const Header = () => {
 
@@ -35,7 +36,6 @@ const Header = () => {
   const dispatch = useAppDispatch();
 
   const [open, setOpen] = useState(false);
-  // const [adminFlg, setAdminFlg] = useState<boolean>(false);
 
   //Reduxから取得
   const uid = useAppSelector(selectUid);
@@ -49,14 +49,15 @@ const Header = () => {
     const userDocmentRef = doc(db, 'user', uid);
     onSnapshot(userDocmentRef, (querySnapshot: any) => {
 
+      const userData = querySnapshot.data();
+
       //データ取得チェック
-      if(!querySnapshot.exists()){
+      if((typeof userData === 'undefined')){
         alert("ユーザー情報が存在しません。管理者に連絡してください。");
         logout();
       }
 
       //Reduxに設定
-      const userData = querySnapshot.data();
       dispatch(setAdmin(userData.admin));
       dispatch(setUserName(userData.userName));
       dispatch(setComName(userData.comName));
@@ -64,7 +65,26 @@ const Header = () => {
     });
 
     //アラート情報を取得する
-    
+    const userCollectionRef = collection(db, 'alert');
+    onSnapshot(userCollectionRef, (querySnapshot: any) => {
+
+      const alertData = querySnapshot.docs.map((doc:any) => ({...doc.data(), id: doc.id }));
+
+      //データ取得チェック
+      if(!alertData.length){
+        alert("アラート情報が存在しません。管理者に連絡してください。");
+        logout();
+      }
+
+      //Reduxに設定
+      dispatch(setAlert1(alertData[0].alert1));
+      dispatch(setAlert2(alertData[0].alert2));
+      dispatch(setAlert3(alertData[0].alert3));
+      dispatch(setAlert4(alertData[0].alert4));
+      dispatch(setAlert5(alertData[0].alert5));
+      dispatch(setDocId(alertData[0].id));
+
+    });
 
   }, []);
 
