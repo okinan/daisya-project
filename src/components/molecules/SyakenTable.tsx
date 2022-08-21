@@ -1,36 +1,18 @@
 import MaterialTable from "@material-table/core";
 import { TextField } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { useAppSelector } from "../../app/hooks";
 import { selectAdmin, selectUid } from "../../features/auth/authSlice";
 import { selectSyakenCar } from "../../features/car/carSlice";
-import { addDoc, collection, doc, serverTimestamp, Timestamp, updateDoc } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, serverTimestamp, Timestamp, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase/FirebaseConfig";
-import { async } from "@firebase/util";
 
 
 function SyakenTable() {
-
-  const dispatch = useAppDispatch();
 
   //Reduxから取得
   const uid = useAppSelector(selectUid);
   const admin = useAppSelector(selectAdmin);
   const syakenCar = useAppSelector(selectSyakenCar);
-
-  //テーブルに表示したいデータ
-  // const [tableData, setTableData] = useState(syakenCar);
-
-
-
-  // 日付をYYYY-MM-DDの書式で返すメソッド
-  // function formatDate(dt: Date) {
-  //   var y = dt.getFullYear();
-  //   var m = ('00' + (dt.getMonth()+1)).slice(-2);
-  //   var d = ('00' + dt.getDate()).slice(-2);
-  //   return (y + '-' + m + '-' + d);
-  // }
-  // console.log("テストだよ");
-  // console.log(test);
 
   // 日付をYYYY-MM-DDの書式で返すメソッド
   const formatDate = (dt: Date) => {
@@ -90,13 +72,6 @@ function SyakenTable() {
           error={props.error}
           helperText={props.helperText}
           defaultValue={props.value}
-          // {...props}
-          // defaultValue={props.value.format('YYYY-MM-DD')}
-          // value={props.value}
-          // defaultValue={(e:any)=>{
-          //   console.log(props.value);
-          //   return props.value;
-          // }}
           onChange={(e) => props.onChange(e.target.value)}
           variant="standard"
         />
@@ -107,60 +82,58 @@ function SyakenTable() {
   //データ追加
   const insertCar = async(newRow: any) => {
 
-    const carCollectionRef = collection(db, 'companyCar');
+    try{
+      const carCollectionRef = collection(db, 'companyCar');
 
-    const documentRef = await addDoc(carCollectionRef, {
-      carName: newRow.carName,
-      carNum: newRow.carNum,
-      carComDay: Timestamp.fromDate(new Date(newRow.carComDay)),
-      registerDate: serverTimestamp(),
-      registerUid: uid,
-      updateDate: serverTimestamp(),
-      updateUid: uid,
-    })
+      await addDoc(carCollectionRef, {
+        carName: newRow.carName,
+        carNum: newRow.carNum,
+        carComDay: Timestamp.fromDate(new Date(newRow.carComDay)),
+        registerDate: serverTimestamp(),
+        registerUid: uid,
+        updateDate: serverTimestamp(),
+        updateUid: uid,
+      })
+    } catch(err){
+      console.log(err);
+      alert("追加失敗!管理者に連絡してください。");
+    }
     
   }
 
+  //データ更新
   const updateCar = async(newRow: any, id: string) => {
 
-    // const newCarData = newRow;
-    // const docId = id;
+    try{
+      const companyCarDocmentRef = doc(db, 'companyCar', id);
 
-    // //更新対象を設定する
-    // const carName:string = newRow.carName;
-    // const carComDay:Date = newRow.carName;
+      await updateDoc(companyCarDocmentRef, {
+        carName: newRow.carName,
+        carNum: newRow.carNum,
+        carComDay: Timestamp.fromDate(new Date(newRow.carComDay)),
+        updateDate: serverTimestamp(),
+        updateUid: uid,
+      })
+    } catch(err){
+      console.log(err);
+      alert("更新失敗!管理者に連絡してください。");
+    }
 
-    //データ更新
-    const carCollectionRef = collection(db, 'companyCar');
-    const documentRef = await addDoc(carCollectionRef, {
-      carName: newRow.carName,
-      carNum: newRow.carNum,
-      carComDay: newRow.carComDay,
-      registerDate: serverTimestamp(),
-      registerUid: uid,
-      updateDate: serverTimestamp(),
-      updateUid: uid,
-    })
-    
-    //tableにも登録する？
-    // newCarData['id'] = documentRef.id;
-    // dispatch(insertSyakenCar(newCarData));
-    
-    // console.log(documentRef.id);
-    // const newData = newRow;
-    // newData['docId'] = 'XXXXXX';
-    // console.log(newData);
   }
 
-  //動作確認用
-  const syakenCarData = [
-    {
-      id: "999999",
-      carName: "追加用",
-      carNum: "沖縄 30 Y58-04",
-      carComDay: "2022-06-18",
+  //データ削除
+  const deleteCar = async(id: string) => {
+
+    try{
+      const companyCarDocmentRef = doc(db, 'companyCar', id);
+
+      await deleteDoc(companyCarDocmentRef);
+    } catch(err){
+      console.log(err);
+      alert("削除失敗!管理者に連絡してください。");
     }
-  ]
+
+  }
 
   const editFunc:any = (adminFlg: boolean) => {
     if(adminFlg){
@@ -168,57 +141,16 @@ function SyakenTable() {
         {
           // 追加処理
           onRowAdd: async(newRow: any) =>{
-            console.log("insert前");
             insertCar(newRow);
-            console.log("insert後");
           },
           // 更新処理
           onRowUpdate: async(newRow: any, oldRow: any) =>{
-            console.log("update前");
             updateCar(newRow, oldRow.id);
-            console.log("update後");
           },
-          // // 新規追加処理
-          // onRowAdd: (newRow: any) =>
-          //   new Promise<void>((resolve, reject) => {
-
-          //     // const newCarData = newRow;
-          //     console.log("insertCar前");
-          //     insertCar(newRow);
-          //     // console.log("dispatch起動");
-          //     // console.log(newRow.carName);
-          //     // dispatch(insertSyakenCar(syakenCarData[0]));
-
-          //     // const carCollectionRef = collection(db, 'companyCar');
-          //     // const documentRef = addDoc(carCollectionRef, {
-          //     //   carName: newCarData.carName,
-          //     //   carNum: newCarData.carNum,
-          //     //   carComDay: newCarData.carComDay,
-          //     //   registerDate: serverTimestamp,
-          //     //   registerUid: uid,
-          //     //   updateDate: serverTimestamp,
-          //     //   updateUid: uid,
-          //     // })
-              
-          //     // console.log(documentRef);
-
-          //     // setTableData([...tableData, newRow]);
-          //     setTimeout(() => resolve(), 500);
-          //   }),
-          // onRowUpdate: (newRow: any, oldRow: any) =>
-          //   new Promise<void>((resolve, reject) => {
-          //     // const updatedData = [...tableData];
-          //     // updatedData[oldRow.tableData.id] = newRow;
-          //     // setTableData(updatedData);
-          //     setTimeout(() => resolve(), 500);
-          //   }),
-          onRowDelete: (selectedRow: any) =>
-            new Promise<void>((resolve, reject) => {
-              // const updatedData = [...tableData];
-              // updatedData.splice(selectedRow.tableData.id, 1);
-              // setTableData(updatedData);
-              setTimeout(() => resolve(), 500);
-            }),
+          // 削除処理
+          onRowDelete: async(selectedRow: any) =>{
+            deleteCar(selectedRow.id);
+          },
         }
       );
     }
