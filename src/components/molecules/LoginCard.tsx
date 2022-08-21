@@ -6,7 +6,6 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import LockIcon from "@mui/icons-material/Lock";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/system";
-import axios from "axios";
 import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { auth } from "../../firebase/FirebaseConfig";
 import { Navigate } from "react-router-dom";

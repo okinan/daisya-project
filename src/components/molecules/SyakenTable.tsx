@@ -22,9 +22,6 @@ function SyakenTable() {
     return (y + '-' + m + '-' + d);
   }
 
-  const sysDate = new Date();
-  const test = formatDate(sysDate);
-
   //テーブルの列名を指定
   const columns = [
     {

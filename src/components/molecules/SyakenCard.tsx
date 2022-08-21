@@ -4,14 +4,6 @@ import CardContent from "@mui/material/CardContent";
 import SyakenTable from "./SyakenTable";
 import { styled } from "@mui/system";
 
-// import React, { useState } from "react";
-// import Card from "@mui/material/Card";
-// import CardContent from "@mui/material/CardContent";
-// import Switch from "@mui/material/Switch";
-// import Grid from "@mui/material/Grid";
-// import { styled } from "@mui/system";
-// import { styled as muistyled } from "@mui/material/styles";
-
 const SDiv = styled("div")(() => ({
   fontSize: 22,
   whiteSpace: "nowrap",

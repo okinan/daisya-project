@@ -29,7 +29,7 @@ import {
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { selectComName, selectUid, selectUserName, setAdmin, setComName, setUserName } from "../../features/auth/authSlice";
 import { setAlert1, setAlert2, setAlert3, setAlert4, setAlert5, setDocId } from "../../features/alert/alertSlice";
-import { setSyakenCar } from "../../features/car/carSlice";
+import { setAllCar, setSyakenCar } from "../../features/car/carSlice";
 
 const Header = () => {
 
@@ -49,6 +49,30 @@ const Header = () => {
     const m = ('00' + (dt.getMonth()+1)).slice(-2);
     const d = ('00' + dt.getDate()).slice(-2);
     return (y + '-' + m + '-' + d);
+  }
+
+  //〇ヶ月後の日付を取得する
+  const getNextMonthDate = (date:any, months:any) => {
+
+    // 基準の年月日を取得
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const day = date.getDate();
+  
+    // 基準の年月からDateオブジェクトを生成
+    const nextDate = new Date(year, month);
+    // 月の設定を変更
+    nextDate.setMonth(nextDate.getMonth() + months);
+    // 末日を取得
+    const lastDay = new Date(nextDate.getFullYear(), nextDate.getMonth() + 1, 0).getDate();
+    // 元の日にちが該当月に無い場合はその月の末日を設定する
+    if(lastDay < day) {
+        nextDate.setDate(lastDay);
+    } else {
+        nextDate.setDate(day);
+    }
+    return nextDate;
+
   }
 
   //初期処理
@@ -73,24 +97,52 @@ const Header = () => {
 
     });
 
+     //現在日と1か月後を取得
+     const today = new Date();
+     const oneMonthLater = getNextMonthDate(today,1);
+
     //車両情報を取得する
     const carCollectionRef = collection(db, 'companyCar');
 
     onSnapshot(carCollectionRef, (querySnapshot: any) => {
 
-      const carData = querySnapshot.docs.map((doc: any) => {
+      //全ての車両情報を取得
+      const allCarData = querySnapshot.docs.map((doc: any) => {
 
         const data: any = doc.data();
+
         data.carComDay = formatDate(new Date(data.carComDay.seconds*1000));   //公式のtoDate()だとエラーになる
+        
         data['id'] = doc.id;
 
         return data;
       });
 
-      console.log(carData);
+      //車検満了日 <= 現在日から1ヶ月以内の車両情報を取得する
+      const syakenCarData = allCarData.filter((data: any)=>{
+
+        const carComDay = new Date(data.carComDay);
+
+        //現在日 <= 車検満了日 <= 現在日から1か月後の場合
+        if((today.getTime() <= carComDay.getTime()) && (carComDay.getTime() <= oneMonthLater.getTime())){
+          
+          //現在日から残りの日数を計算する
+          const deadLine: number = Math.floor((carComDay.getTime() - today.getTime()) / 86400000) + 1;
+          data.deadLine = `${deadLine}日`;
+          return true;
+          
+          //車検満了日 < 現在日の場合
+        }else if(carComDay.getTime() < today.getTime()){
+          data.deadLine = "×";
+          return true;
+        }
+
+        return false;
+      })
 
       //Reduxに設定
-      dispatch(setSyakenCar(carData));
+      dispatch(setSyakenCar(syakenCarData));
+      dispatch(setAllCar(allCarData));
 
     });
 
