@@ -29,6 +29,7 @@ import {
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { selectComName, selectUid, selectUserName, setAdmin, setComName, setUserName } from "../../features/auth/authSlice";
 import { setAlert1, setAlert2, setAlert3, setAlert4, setAlert5, setDocId } from "../../features/alert/alertSlice";
+import { setSyakenCar } from "../../features/car/carSlice";
 
 const Header = () => {
 
@@ -41,6 +42,14 @@ const Header = () => {
   const uid = useAppSelector(selectUid);
   const userName = useAppSelector(selectUserName);
   const comName = useAppSelector(selectComName);
+
+  // 日付をYYYY-MM-DDの書式で返す
+  const formatDate = (dt: Date) => {
+    const y = dt.getFullYear();
+    const m = ('00' + (dt.getMonth()+1)).slice(-2);
+    const d = ('00' + dt.getDate()).slice(-2);
+    return (y + '-' + m + '-' + d);
+  }
 
   //初期処理
   useEffect(() => {
@@ -61,6 +70,27 @@ const Header = () => {
       dispatch(setAdmin(userData.admin));
       dispatch(setUserName(userData.userName));
       dispatch(setComName(userData.comName));
+
+    });
+
+    //車両情報を取得する
+    const carCollectionRef = collection(db, 'companyCar');
+
+    onSnapshot(carCollectionRef, (querySnapshot: any) => {
+
+      const carData = querySnapshot.docs.map((doc: any) => {
+
+        const data: any = doc.data();
+        data.carComDay = formatDate(new Date(data.carComDay.seconds*1000));   //公式のtoDate()だとエラーになる
+        data['id'] = doc.id;
+
+        return data;
+      });
+
+      console.log(carData);
+
+      //Reduxに設定
+      dispatch(setSyakenCar(carData));
 
     });
 
