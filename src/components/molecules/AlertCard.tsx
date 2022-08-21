@@ -27,7 +27,7 @@ const SSwitch = muistyled(Switch)(() => ({
 }));
 
 const SDiv = styled("div")(() => ({
-  fontSize: 22,
+  fontSize: 20,
   textAlign: "center",
   marginTop: "5px",
   marginBottom: "10px",

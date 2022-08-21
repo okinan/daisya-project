@@ -328,11 +328,11 @@ const Header = () => {
                 textAlign: "left",
                 float: "right",
                 display: {
-                  // xs: "none",
+                  xs: "none",
                   sm: "none",
                   md: "block",
-                  // lg: "block",
-                  // xl: "block",
+                  lg: "block",
+                  xl: "block",
                 },
               }}
             >
