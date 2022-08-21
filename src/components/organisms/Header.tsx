@@ -118,8 +118,13 @@ const Header = () => {
         return data;
       });
 
+      //車検満了日が古い順にソートする
+      const allCarDataSort = allCarData.sort(function(a:any, b:any) {
+        return (a.carComDay < b.carComDay) ? -1 : 1;  //オブジェクトの昇順ソート
+      });
+
       //車検満了日 <= 現在日から1ヶ月以内の車両情報を取得する
-      const syakenCarData = allCarData.filter((data: any)=>{
+      const syakenCarData = allCarDataSort.filter((data: any)=>{
 
         const carComDay = new Date(data.carComDay);
 
@@ -145,7 +150,7 @@ const Header = () => {
 
       //Reduxに設定
       dispatch(setSyakenCar(syakenCarData));
-      dispatch(setAllCar(allCarData));
+      dispatch(setAllCar(allCarDataSort));
       dispatch(setSyakenDaisu(syakenCarData.length));
 
     });
