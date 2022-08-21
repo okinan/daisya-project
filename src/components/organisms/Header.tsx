@@ -29,7 +29,7 @@ import {
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
 import { selectComName, selectUid, selectUserName, setAdmin, setComName, setUserName } from "../../features/auth/authSlice";
 import { setAlert1, setAlert2, setAlert3, setAlert4, setAlert5, setDocId } from "../../features/alert/alertSlice";
-import { setAllCar, setSyakenCar } from "../../features/car/carSlice";
+import { setAllCar, setSyakenCar, setSyakenDaisu } from "../../features/car/carSlice";
 
 const Header = () => {
 
@@ -123,8 +123,11 @@ const Header = () => {
 
         const carComDay = new Date(data.carComDay);
 
+        //現在日だった場合の対応
+        const todayFlg:boolean = today.getFullYear() === carComDay.getFullYear() && today.getMonth() === carComDay.getMonth() && today.getDate() === carComDay.getDate();
+
         //現在日 <= 車検満了日 <= 現在日から1か月後の場合
-        if((today.getTime() <= carComDay.getTime()) && (carComDay.getTime() <= oneMonthLater.getTime())){
+        if( todayFlg || ((today.getTime() < carComDay.getTime()) && (carComDay.getTime() <= oneMonthLater.getTime()))){
           
           //現在日から残りの日数を計算する
           const deadLine: number = Math.floor((carComDay.getTime() - today.getTime()) / 86400000) + 1;
@@ -143,6 +146,7 @@ const Header = () => {
       //Reduxに設定
       dispatch(setSyakenCar(syakenCarData));
       dispatch(setAllCar(allCarData));
+      dispatch(setSyakenDaisu(syakenCarData.length));
 
     });
 

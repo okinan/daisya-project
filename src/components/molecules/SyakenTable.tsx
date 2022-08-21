@@ -74,6 +74,15 @@ function SyakenTable() {
         />
       ),
     },
+    {
+      title: "残数",
+      field: "deadLine",
+      sorting: false,
+      headerStyle: { whiteSpace: "nowrap" },
+      cellStyle: { whiteSpace: "nowrap" },
+      editable: "never",
+      width: "10%"
+    },
   ];
 
   //データ追加

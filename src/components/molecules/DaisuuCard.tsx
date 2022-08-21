@@ -2,6 +2,8 @@ import React from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import { styled } from "@mui/system";
+import { useAppSelector } from "../../app/hooks";
+import { selectSyakenDaisu } from "../../features/car/carSlice";
 
 const SDivTitle = styled("div")(() => ({
   fontSize: 22,
@@ -23,6 +25,7 @@ const SDivDai = styled("div")(() => ({
 
 function DaisuuCard() {
   
+  const syakenDaisu = useAppSelector(selectSyakenDaisu);
 
   return (
     <>
@@ -36,7 +39,7 @@ function DaisuuCard() {
     >
       <CardContent>
         <SDivTitle>車検満了日が間近の車両</SDivTitle>
-        <SDivDaisu>10</SDivDaisu>
+        <SDivDaisu>{syakenDaisu}</SDivDaisu>
         <SDivDai>台</SDivDai>
       </CardContent>
     </Card>

@@ -7,6 +7,7 @@ export const carSlice = createSlice({
   initialState: {
     syakenCar: [],
     allCar: [],
+    syakenDaisu: 0
   },
   reducers: {
     setSyakenCar: (state, action:PayloadAction<any>) => {
@@ -15,12 +16,16 @@ export const carSlice = createSlice({
     setAllCar: (state, action:PayloadAction<any>) => {
       state.allCar = action.payload;
     },
+    setSyakenDaisu: (state, action:PayloadAction<number>) => {
+      state.syakenDaisu = action.payload;
+    },
   },
 });
 
-export const { setSyakenCar, setAllCar } = carSlice.actions;
+export const { setSyakenCar, setAllCar, setSyakenDaisu } = carSlice.actions;
 
 export const selectSyakenCar = (state: RootState) => state.car.syakenCar;
 export const selectAllCar = (state: RootState) => state.car.allCar;
+export const selectSyakenDaisu = (state: RootState) => state.car.syakenDaisu;
 
 export default carSlice.reducer;
