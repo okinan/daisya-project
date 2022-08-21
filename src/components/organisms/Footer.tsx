@@ -6,7 +6,7 @@ const Sfooter = styled("footer")(() => ({
   textAlign: "center",
   padding: "20px 0",
   width: "100%",
-  position: "fixed",
+  position: "relative",
   bottom: "0",
   right: "0",
 }));

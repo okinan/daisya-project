@@ -6,6 +6,7 @@ import { auth } from "../../firebase/FirebaseConfig";
 import { Navigate } from "react-router-dom";
 import { useAppDispatch } from "../../app/hooks";
 import { setUid } from "../../features/auth/authSlice";
+import { Box } from "@mui/material";
 
 const MainPageTemplate = (props: any) => {
   
@@ -34,6 +35,7 @@ const MainPageTemplate = (props: any) => {
             <>
               <Header />
               {props.Page}
+              <Box sx={{ mt: 8 }}></Box>
               <Footer />
             </>
           )}
