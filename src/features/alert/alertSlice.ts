@@ -1,16 +1,27 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 
+type alertType = {
+  alert1: boolean
+  alert2: boolean
+  alert3: boolean
+  alert4: boolean
+  alert5: boolean
+  docId: string
+}
+
+const initialState: alertType = {
+  alert1: false,
+  alert2: false,
+  alert3: false,
+  alert4: false,
+  alert5: false,
+  docId: "",
+}
+
 export const alertSlice = createSlice({
   name: 'alert',
-  initialState: {
-    alert1: false,
-    alert2: false,
-    alert3: false,
-    alert4: false,
-    alert5: false,
-    docId: "",
-  },
+  initialState: initialState,
   reducers: {
     setAlert1: (state, action:PayloadAction<boolean>) => {
       state.alert1 = action.payload;

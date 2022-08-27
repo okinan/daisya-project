@@ -1,14 +1,23 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 
+type authType = {
+  uid: string
+  userName: string
+  comName: string
+  admin: boolean
+}
+
+const initialState: authType = {
+  uid: "",
+  userName: "",
+  comName: "",
+  admin: false,
+}
+
 export const authSlice = createSlice({
   name: 'auth',
-  initialState: {
-    uid: "",
-    userName: "",
-    comName: "",
-    admin: false,
-  },
+  initialState: initialState,
   reducers: {
     setUid: (state, action:PayloadAction<string>) => {
       state.uid = action.payload;

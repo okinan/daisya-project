@@ -1,19 +1,38 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../app/store';
 
+type carDataType = {
+  carComDay: string
+  carName: string
+  carNum: string
+  deadLine?: string
+  id: string
+  registerDate: object
+  registerUid: string
+  updateDate: object
+  updateUid: string
+}[]
+
+type carType = {
+  syakenCar: carDataType
+  allCar: carDataType
+  syakenDaisu: number
+}
+
+const initialState: carType = {
+  syakenCar: [],
+  allCar: [],
+  syakenDaisu: 0,
+}
 
 export const carSlice = createSlice({
   name: 'car',
-  initialState: {
-    syakenCar: [],
-    allCar: [],
-    syakenDaisu: 0
-  },
+  initialState: initialState,
   reducers: {
-    setSyakenCar: (state, action:PayloadAction<any>) => {
+    setSyakenCar: (state, action:PayloadAction<carDataType>) => {
       state.syakenCar = action.payload;
     },
-    setAllCar: (state, action:PayloadAction<any>) => {
+    setAllCar: (state, action:PayloadAction<carDataType>) => {
       state.allCar = action.payload;
     },
     setSyakenDaisu: (state, action:PayloadAction<number>) => {
