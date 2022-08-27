@@ -6,6 +6,7 @@ import {
 import { auth } from "../../../firebase/FirebaseConfig";
 import { Navigate } from "react-router-dom";
 
+//アカウント登録のサンプルページのため、コードを整理していない
 const RegisterPage = () => {
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");

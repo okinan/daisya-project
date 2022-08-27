@@ -38,7 +38,7 @@ function DaisuuCard() {
       }}
     >
       <CardContent>
-        <SDivTitle>車検更新対象</SDivTitle>
+        <SDivTitle>車検満了日間近</SDivTitle>
         <SDivDaisu>{syakenDaisu}</SDivDaisu>
         <SDivDai>台</SDivDai>
       </CardContent>
